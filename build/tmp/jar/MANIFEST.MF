@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Implementation-Group: au.com.es
+Title: es-cybersource-connector
+Implementation-Version: 2.0.0
+Java-Version: 21
+Java-Vendor: Azul Zulu
+Build-Time: 2024-12-17T19:01:06 IST
+

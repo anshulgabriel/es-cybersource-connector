@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="au.com.escybersourceconnector.EsCybersourceConnectorApplicationTests" tests="1" skipped="1" failures="0" errors="0" timestamp="2024-12-17T13:31:20" hostname="DESKTOP-F1C9R45" time="0.0">
+  <properties/>
+  <testcase name="contextLoads()" classname="au.com.escybersourceconnector.EsCybersourceConnectorApplicationTests" time="0.0">
+    <skipped/>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

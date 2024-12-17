@@ -1,0 +1,25 @@
+server:
+  port: ${SERVER_PORT:8008}
+  address: 0.0.0.0
+
+
+spring:
+  application:
+    name: es-cybersource-connector
+    web-application-type: reactive
+  security:
+    enabled: false
+
+logging:
+  level:
+    software.amazon.awssdk: DEBUG
+
+aws:
+  region: "ap-southeast-2"
+
+cybersource:
+  exchange:
+    csrf:
+      enabled: true
+
+CYBERSOURCE_ENDPOINT: "https://apitest.cybersource.com"

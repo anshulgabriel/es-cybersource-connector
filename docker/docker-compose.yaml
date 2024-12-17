@@ -1,0 +1,21 @@
+services:
+  app:
+    image: es-cybersource-connector:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: es-cybersource-connector
+    ports:
+      - "8008:8008"
+    environment:
+      - SERVER_PORT=8008
+      - AWS_REGION=ap-southeast-2
+      # Add other environment variables here as needed
+    networks:
+      - app-network
+    volumes:
+      - .:/app  # Optional: Mounts your local directory to the container for development
+
+networks:
+  app-network:
+    driver: bridge  # Default network driver

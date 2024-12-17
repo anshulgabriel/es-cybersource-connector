@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Implementation-Group: au.com.es
+Title: es-cybersource-connector
+Implementation-Version: 2.0.0
+Java-Version: 21
+Java-Vendor: Azul Zulu
+Build-Time: 2024-12-17T19:01:06 IST
+Main-Class: org.springframework.boot.loader.launch.JarLauncher
+Start-Class: au.com.escybersourceconnector.EsCybersourceConnectorApplica
+ tion
+Spring-Boot-Version: 3.3.4
+Spring-Boot-Classes: BOOT-INF/classes/
+Spring-Boot-Lib: BOOT-INF/lib/
+Spring-Boot-Classpath-Index: BOOT-INF/classpath.idx
+Spring-Boot-Layers-Index: BOOT-INF/layers.idx
+Build-Jdk-Spec: 21
+Implementation-Title: es-cybersource-connector
+

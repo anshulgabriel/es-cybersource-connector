@@ -1,0 +1,131 @@
+buildscript {
+	ext {
+		set('springBootVersion', '3.3.4')
+		set('springDependencyManagementVersion', '1.1.6')
+	    set('jarClassifier', '')
+		set('bootJarClassifier', 'boot')
+		set('buildTimeNow', new Date().format("yyyy-MM-dd'T'HH:mm:ss z"))
+		set('esPaymentsAssistVersion', property("esPaymentsAssistVersion"))
+
+	}
+}
+
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version "${springBootVersion}"
+	id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
+	id 'maven-publish'
+}
+
+group = 'au.com.es'
+version = hasProperty("build_version") ? property('build_version') : property("releaseVersion")
+
+def githubUsername = System.getenv("GITHUB_USERNAME") ?: System.getProperty("GITHUB_USERNAME") ?: properties['ipsi.githubmvn.user']
+def githubPassword = System.getenv("GITHUB_PASSWORD") ?: System.getProperty("GITHUB_PASSWORD") ?: properties['ipsi.githubmvn.password']
+
+println("--------------------------")
+println("| Version:             ${version}")
+println("| es-payments-assist:  ${property("esPaymentsAssistVersion")}")
+println("--------------------------")
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_21
+	ext {
+		set('vendor', JvmVendorSpec.AZUL)
+	}
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+		vendor = JvmVendorSpec.AZUL
+	}
+	withSourcesJar()
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+	maven {
+		name "GitHubPackages"
+		url "https://maven.pkg.github.com/ipsi-au/mvnrepo"
+		credentials {
+			username "$githubUsername"
+			password "$githubPassword"
+		}
+	}
+}
+
+
+dependencies {
+	implementation("au.com.es:es-payments-assist:${esPaymentsAssistVersion}")
+	annotationProcessor "org.projectlombok:lombok"
+	testAnnotationProcessor "org.projectlombok:lombok"
+	testCompileOnly "org.projectlombok:lombok"
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+}
+
+jar {
+	enabled = true
+	manifest {
+		attributes(
+				'Implementation-Group': project.group,
+				'Title': project.name,
+				'Implementation-Version': project.version,
+				'Java-Version': java.sourceCompatibility,
+				'Java-Vendor': java.ext.vendor,
+				'Build-Time': "${buildTimeNow}"
+		)
+	}
+	archiveClassifier = "${jarClassifier}"
+}
+
+bootJar {
+	manifest {
+		attributes(
+				'Implementation-Group': project.group,
+				'Title': project.name,
+				'Implementation-Version': project.version,
+				'Java-Version': java.sourceCompatibility,
+				'Java-Vendor': java.ext.vendor,
+				'Build-Time': "${buildTimeNow}"
+		)
+	}
+	archiveClassifier = "${bootJarClassifier}"
+}
+
+springBoot {
+	buildInfo {
+		properties {
+			additional = [
+					'JavaVersion'      : java.sourceCompatibility,
+					'JavaVendor'       : java.ext.vendor,
+					'SpringBootVersion': "${springBootVersion}", // should match to the version in plugins
+					'BuildTime'        : "${buildTimeNow}",
+			]
+		}
+		excludes = ['time']
+	}
+}
+
+publishing {
+	publications {
+		//noinspection GroovyAssignabilityCheck
+		bootJava(MavenPublication) {
+			from components.java
+		}
+	}
+	repositories {
+		maven {
+			name = "GitHubPackages"
+			url = uri("https://maven.pkg.github.com/ipsi-au/mvnrepo")
+			credentials {
+				username = githubUsername
+				password = githubPassword
+			}
+		}
+	}
+}
+
+test {
+	useJUnitPlatform()
+	jvmArgs("-XX:+EnableDynamicAgentLoading")
+}
